@@ -6,15 +6,15 @@ ClipShots (https://github.com/Tangshitao/ClipShots)
 
 ### Ground Truth - format   
 **consolidate_datasets.py**   
-python consolidate_datasets.py   
+> python consolidate_datasets.py   
 
 ### Generate - .tfrecord   
 **create_dataset.py**   
-python create_dataset.py train --mapping_fn consolidated/BBCDataset.txt --target_dir create --target_fn BBCDataset.txt   
-python create_dataset.py train --mapping_fn consolidated/RAIDataset.txt --target_dir create --target_fn RAIDataset.txt   
-python create_dataset.py train --mapping_fn consolidated/ClipShotsGradual.txt --target_dir create --target_fn ClipShotsGradual.txt   
-python create_dataset.py train --mapping_fn consolidated/ClipShotsTrain.txt --target_dir create --target_fn ClipShotsTrain.txt   
-python create_dataset.py train --mapping_fn consolidated/ClipShotsTest.txt --target_dir create --target_fn ClipShotsTest.txt   
+> python create_dataset.py train --mapping_fn consolidated/BBCDataset.txt --target_dir create --target_fn BBCDataset.txt   
+> python create_dataset.py train --mapping_fn consolidated/RAIDataset.txt --target_dir create --target_fn RAIDataset.txt   
+> python create_dataset.py train --mapping_fn consolidated/ClipShotsGradual.txt --target_dir create --target_fn ClipShotsGradual.txt   
+> python create_dataset.py train --mapping_fn consolidated/ClipShotsTrain.txt --target_dir create --target_fn ClipShotsTrain.txt   
+> python create_dataset.py train --mapping_fn consolidated/ClipShotsTest.txt --target_dir create --target_fn ClipShotsTest.txt   
    
 # Train   
 ### Modify config   
@@ -22,6 +22,6 @@ python create_dataset.py train --mapping_fn consolidated/ClipShotsTest.txt --tar
 
 
 ### Run   
-python training.py configs/transnetv2.gin   
+> python training.py configs/transnetv2.gin   
 
 # Test   
