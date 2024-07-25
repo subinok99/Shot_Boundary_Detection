@@ -13,9 +13,8 @@
    
 # Train   
 ### Modify config   
-**configs/transnetv2.gin**   
-* datasets path
-  > options.trn_files  ,  options.tst_files 
+> configs/transnetv2.gin   
+* datasets path  (options.trn_files  ,  options.tst_files)   
 
 ### Run   
 > python training.py configs/transnetv2.gin   
