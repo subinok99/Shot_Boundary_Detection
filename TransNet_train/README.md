@@ -5,12 +5,10 @@
 * (Optional) IACC.3   
 
 ### Ground Truth - format   
-**consolidate_datasets.py**   
-> python consolidate_datasets.py   
+> python **consolidate_datasets.py**   
 
 ### Generate .tfrecord   
-**create_dataset.py**   
-> python create_dataset.py train --mapping_fn {consolidated_path} --target_dir {target_dir_path} --target_fn {target_file_name}  
+> python **create_dataset.py** train --mapping_fn {consolidated_path} --target_dir {target_dir_path} --target_fn {target_file_name}  
 
    
 # Train   
