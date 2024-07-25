@@ -8,13 +8,10 @@
 **consolidate_datasets.py**   
 > python consolidate_datasets.py   
 
-### Generate - .tfrecord   
+### Generate .tfrecord   
 **create_dataset.py**   
-> python create_dataset.py train --mapping_fn consolidated/BBCDataset.txt --target_dir create --target_fn BBCDataset.txt   
-> python create_dataset.py train --mapping_fn consolidated/RAIDataset.txt --target_dir create --target_fn RAIDataset.txt   
-> python create_dataset.py train --mapping_fn consolidated/ClipShotsGradual.txt --target_dir create --target_fn ClipShotsGradual.txt   
-> python create_dataset.py train --mapping_fn consolidated/ClipShotsTrain.txt --target_dir create --target_fn ClipShotsTrain.txt   
-> python create_dataset.py train --mapping_fn consolidated/ClipShotsTest.txt --target_dir create --target_fn ClipShotsTest.txt   
+> python create_dataset.py train --mapping_fn {consolidated_path} --target_dir {target_dir_path} --target_fn {target_file_name}  
+
    
 # Train   
 ### Modify config   
