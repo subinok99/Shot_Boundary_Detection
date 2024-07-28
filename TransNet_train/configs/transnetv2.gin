@@ -111,20 +111,15 @@ options.learning_rate_decay = None
 options.learning_rate_schedule = None
 options.log_dir = 'logs'
 options.log_name = 'transnetv2'
-options.n_epochs = 30
+options.n_epochs = 1
 options.original_transnet = False
 options.restore = None
 options.restore_resnet_features = None
 options.test_only = False
 options.transition_only_data_fraction = 0.3
 options.transition_only_trn_files = None
-
-options.trn_files = \
-    ['data/ClipShotsTrain_Train/*.tfrecord',
-     'data/ClipShotsGradual/*.tfrecord']
-options.tst_files = \
-    {'clip_shots_val': ['data/ClipShotsTrain_Valid/*.tfrecord']}
-
+options.trn_files =  ['data/BBCDataset_Train.txt-0000.tfrecord', 'data/RAIDataset_Train.txt-0000.tfrecord']   
+options.tst_files = {'bbc_val': ['data/BBCDataset_Valid/*.tfrecord'],  'rai_val': ['data/RAIDataset_Valid/*.tfrecord']}
 
 # Parameters for parse_test_sample:
 # ==============================================================================

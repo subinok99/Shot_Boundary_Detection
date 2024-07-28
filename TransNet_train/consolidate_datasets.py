@@ -80,12 +80,16 @@ for fn in tqdm(glob.glob(BBC_mp4_files)):
     
     fn_idx = os.path.basename(fn).split(".")[0].split("_")[1]
     gt_fn = glob.glob(os.path.join(BBC_txt_files, fn_idx + "*"))[0]
-    
+
     scenes = np.loadtxt(gt_fn, dtype=np.int32, ndmin=2)
     scenes = scenes + 1
     if scenes[0][0] == 1:
         scenes[0][0] = 0
     
+    print("\n\n")
+    print(fn)
+    print("\n\n")
+
     video = get_frames(fn)
     
     save_to = os.path.abspath(os.path.join(BBC_target_dir, fn_idx))

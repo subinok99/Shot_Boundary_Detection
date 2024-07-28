@@ -165,7 +165,7 @@ class ResNetBlock(tf.keras.layers.Layer):
         return tf.nn.relu(x)
 
 
-@gin.configurable(blacklist=["name"])
+@gin.configurable(denylist=["name"])
 class C3DConvolutions(tf.keras.Model):
     # C3D model for UCF101
     # https://github.com/tqvinhcs/C3D-tensorflow/blob/master/m_c3d.py#L63
@@ -227,7 +227,7 @@ class C3DConvolutions(tf.keras.Model):
         return sio.loadmat(filename, squeeze_me=True)['weights']
 
 
-@gin.configurable(blacklist=["name"])
+@gin.configurable(denylist=["name"])
 class C3DNet(tf.keras.Model):
 
     def __init__(self, D=256, name="C3DNet"):

@@ -5,15 +5,6 @@ import argparse
 import datetime
 from PIL import Image
 import tensorflow as tf
-
-gpu = tf.config.experimental.list_physical_devices('GPU')
-if gpu:
-    try:
-        for i in gpu:
-            tf.config.experimental.set_memory_growth(i, True)
-    except RuntimeError as e:
-        print(e)
-
 import gin.tf.external_configurables
 
 import models
@@ -26,7 +17,7 @@ import weight_decay_optimizers
 gin.config.external_configurable(weight_decay_optimizers.SGDW, 'weight_decay_optimizers.SGDW')
 
 
-@gin.configurable("options", blacklist=["create_dir_and_summaries"])
+@gin.configurable("options", denylist=["create_dir_and_summaries"])
 def get_options_dict(n_epochs=None,
                      log_dir=gin.REQUIRED,
                      log_name=gin.REQUIRED,
@@ -95,7 +86,7 @@ def get_options_dict(n_epochs=None,
     }
 
 
-@gin.configurable("training", blacklist=["net", "summary_writer"])
+@gin.configurable("training", denylist=["net", "summary_writer"])
 class Trainer:
 
     def __init__(self, net, summary_writer,
@@ -116,7 +107,7 @@ class Trainer:
         self.results = {}
         self.evaluate_on_middle_frames_only = evaluate_on_middle_frames_only
 
-    @gin.configurable("loss", blacklist=["one_hot_pred", "one_hot_gt", "many_hot_pred", "many_hot_gt", "reg_losses"])
+    @gin.configurable("loss", denylist=["one_hot_pred", "one_hot_gt", "many_hot_pred", "many_hot_gt", "reg_losses"])
     def compute_loss(self, one_hot_pred, one_hot_gt, many_hot_pred=None, many_hot_gt=None,
                      transition_weight=1.,
                      many_hot_loss_weight=0.,
@@ -194,6 +185,7 @@ class Trainer:
                                                         many_hot_pred, many_hot_gt,
                                                         reg_losses={"comb_reg": comb_reg_loss})
 
+        #print("step 1")
         grads = tape.gradient(total_loss, self.net.trainable_weights)
         with tf.name_scope("grad_check"):
             grads = [
@@ -208,7 +200,7 @@ class Trainer:
         with self.summary_writer.as_default():
             tf.summary.scalar("grads/norm", grad_norm, step=self.optimizer.iterations)
             tf.summary.scalar("loss/immediate/total", total_loss, step=self.optimizer.iterations)
-
+        #print("step 2") 
         if not run_summaries:
             return
 
@@ -230,7 +222,9 @@ class Trainer:
             metric.reset_states()
 
         for i, (frame_sequence, one_hot_gt, many_hot_gt) in dataset.enumerate():
+            #print("\n------     " + str(i) + "     ------\n")
             if i % self.log_freq == self.log_freq - 1:
+                #print("\n------    if    ------\n")
                 one_hot_pred, many_hot_pred, step = self.train_batch(
                     frame_sequence, one_hot_gt, many_hot_gt, run_summaries=True)
 
@@ -243,7 +237,10 @@ class Trainer:
                 for metric in self.mean_metrics.values():
                     metric.reset_states()
             else:
+                #print("\n------    else    ------\n")
                 self.train_batch(frame_sequence, one_hot_gt, many_hot_gt, run_summaries=False)
+                #print("\n--- batch end ------\n")
+
             print("\r", i.numpy(), end="")
             if self.n_batches_per_epoch is not None and self.n_batches_per_epoch == i:
                 break
@@ -323,17 +320,15 @@ class Trainer:
 
 
 if __name__ == "__main__":
+    #gpus = tf.config.experimental.list_physical_devices('GPU')
+    #tf.config.experimental.set_memory_growth(gpus[0], True)
 
     parser = argparse.ArgumentParser(description="Train TransNet")
     parser.add_argument("config", help="path to config")
     args = parser.parse_args()
 
-    print(args.config)
-
     gin.parse_config_file(args.config)
     options = get_options_dict()
-
-    print(options)
 
     trn_ds = input_processing.train_pipeline(options["trn_files"]) if len(options["trn_files"]) > 0 else None
     if options["transition_only_trn_files"] is not None:

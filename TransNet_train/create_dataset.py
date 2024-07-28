@@ -44,7 +44,7 @@ def scenes2zero_one_representation(scenes, n_frames):
         # [0][x][x]|[x][x][5] -> 2
         # ...
         if not (prev_end == 0 and start == 0):
-            one_hot_index = prev_end + (start - prev_end) // 2
+            one_hot_index = prev_end + (start - prev_end) // 2 -1
             one_hot[one_hot_index] = 1
 
         prev_end = end
@@ -54,7 +54,7 @@ def scenes2zero_one_representation(scenes, n_frames):
         for i in range(prev_end, n_frames):
             many_hot[i] = 1
 
-        one_hot_index = prev_end + (n_frames - prev_end) // 2
+        one_hot_index = prev_end + (n_frames - prev_end) // 2 -1
         one_hot[one_hot_index] = 1
 
     return one_hot, many_hot
@@ -142,6 +142,10 @@ def create_train_dataset(target_dir, target_fn, mapping_fn, width, height, n_vid
     for start_idx in range(0, len(mapping), n_videos_in_tfrecord):
         tfrecord_scenes = []
         for video_fn, scenes_fn in mapping[start_idx:start_idx + n_videos_in_tfrecord]:
+
+            print(video_fn)
+            print(os.path.isfile(video_fn))
+
             tfrecord_scenes.extend(
                 get_scenes_from_video(video_fn, scenes_fn, width, height, six_channels=six_channels)
             )

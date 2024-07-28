@@ -6,7 +6,7 @@ import tensorflow as tf
 from models import ResNet18, ResNetBlock
 
 
-@gin.configurable(blacklist=["name"])
+@gin.configurable(denylist=["name"])
 class TransNetV2(tf.keras.Model):
 
     def __init__(self, F=16, L=3, S=2, D=256,
@@ -92,7 +92,7 @@ class TransNetV2(tf.keras.Model):
         return one_hot
 
 
-@gin.configurable(whitelist=["shortcut", "use_octave_conv", "pool_type", "stochastic_depth_drop_prob"])
+@gin.configurable(allowlist=["shortcut", "use_octave_conv", "pool_type", "stochastic_depth_drop_prob"])
 class StackedDDCNNV2(tf.keras.layers.Layer):
 
     def __init__(self, n_blocks, filters, shortcut=False, use_octave_conv=False, pool_type="max",
@@ -147,7 +147,7 @@ class StackedDDCNNV2(tf.keras.layers.Layer):
         return x
 
 
-@gin.configurable(whitelist=["batch_norm"])
+@gin.configurable(allowlist=["batch_norm"])
 class DilatedDCNNV2(tf.keras.layers.Layer):
 
     def __init__(self, filters, batch_norm=False, activation=None, octave_conv=False, name="DilatedDCNN"):
@@ -186,7 +186,7 @@ class DilatedDCNNV2(tf.keras.layers.Layer):
         return x
 
 
-@gin.configurable(whitelist=["separable", "kernel_initializer"])
+@gin.configurable(allowlist=["separable", "kernel_initializer"])
 class Conv3DConfigurable(tf.keras.layers.Layer):
 
     def __init__(self,
@@ -226,7 +226,7 @@ class Conv3DConfigurable(tf.keras.layers.Layer):
         return x
 
 
-@gin.configurable(whitelist=["alpha"])
+@gin.configurable(allowlist=["alpha"])
 class OctConv3D(tf.keras.layers.Layer):
 
     def __init__(self, filters, kernel_size=3, dilation_rate=(1, 1, 1), alpha=0.25,
@@ -281,7 +281,7 @@ class OctConv3D(tf.keras.layers.Layer):
         return low_output, high_output
 
 
-@gin.configurable(whitelist=["trainable"])
+@gin.configurable(allowlist=["trainable"])
 class ResNetFeatures(tf.keras.layers.Layer):
 
     def __init__(self, trainable=False, name="ResNetFeatures"):
@@ -329,7 +329,7 @@ class ResNetFeatures(tf.keras.layers.Layer):
                 v.assign(f[name][:])
 
 
-@gin.configurable(whitelist=["similarity_dim", "lookup_window", "output_dim", "stop_gradient", "use_bias"])
+@gin.configurable(allowlist=["similarity_dim", "lookup_window", "output_dim", "stop_gradient", "use_bias"])
 class FrameSimilarity(tf.keras.layers.Layer):
 
     def __init__(self,
@@ -379,7 +379,7 @@ class FrameSimilarity(tf.keras.layers.Layer):
         return self.fc(similarities)
 
 
-@gin.configurable(whitelist=["filters", "delta_scale", "loss_weight"])
+@gin.configurable(allowlist=["filters", "delta_scale", "loss_weight"])
 class ConvexCombinationRegularization(tf.keras.layers.Layer):
 
     def __init__(self, filters=32, delta_scale=10., loss_weight=0.01, name="ConvexCombinationRegularization"):
@@ -422,7 +422,7 @@ class ConvexCombinationRegularization(tf.keras.layers.Layer):
         return alpha, loss_
 
 
-@gin.configurable(whitelist=["lookup_window", "output_dim"])
+@gin.configurable(allowlist=["lookup_window", "output_dim"])
 class ColorHistograms(tf.keras.layers.Layer):
 
     def __init__(self, lookup_window=101, output_dim=None, name="ColorHistograms"):

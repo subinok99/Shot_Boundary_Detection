@@ -2,7 +2,7 @@ import gin
 import tensorflow as tf
 
 
-@gin.configurable(blacklist=["filenames"])
+@gin.configurable(denylist=["filenames"])
 def train_pipeline(filenames,
                    shuffle_buffer=100,
                    shot_len=100,
@@ -36,7 +36,7 @@ def train_pipeline(filenames,
     return ds
 
 
-@gin.configurable(blacklist=["filenames"])
+@gin.configurable(denylist=["filenames"])
 def train_transition_pipeline(filenames,
                               shuffle_buffer=100,
                               batch_size=16,
@@ -57,7 +57,7 @@ def train_transition_pipeline(filenames,
 
 
 @tf.function
-@gin.configurable(blacklist=["sample"])
+@gin.configurable(denylist=["sample"])
 def parse_train_transition_sample(sample,
                                   shot_len=None,
                                   frame_width=48,
@@ -90,7 +90,7 @@ def parse_train_transition_sample(sample,
 
 
 @tf.function
-@gin.configurable(blacklist=["sample"])
+@gin.configurable(denylist=["sample"])
 def parse_train_sample(sample,
                        shot_len=None,
                        frame_width=48,
@@ -141,7 +141,7 @@ def parse_train_sample(sample,
 
 
 @tf.function
-@gin.configurable(blacklist=["shot", "target_width", "target_height"])
+@gin.configurable(denylist=["shot", "target_width", "target_height"])
 def augment_shot_spacial(shot, target_width, target_height,
                          random_shake_prob=0.3,
                          random_shake_max_size=15,
@@ -175,7 +175,7 @@ def augment_shot_spacial(shot, target_width, target_height,
 
 
 @tf.function
-@gin.configurable(blacklist=["shot", "no_channels"])
+@gin.configurable(denylist=["shot", "no_channels"])
 def augment_shot(shot,
                  up_down_flip_prob=.2,
                  left_right_flip_prob=.5,
@@ -236,7 +236,7 @@ def augment_shot(shot,
 
 
 @tf.function
-@gin.configurable(blacklist=["shots", "lens"])
+@gin.configurable(denylist=["shots", "lens"])
 def concat_shots(shots,
                  lens,
                  shot_len=None,
@@ -355,7 +355,7 @@ def advanced_shot_transitions(shot1, shot2, trans_interpolation):
 
 
 @tf.function
-@gin.configurable(blacklist=["shot"])
+@gin.configurable(denylist=["shot"])
 def cutout(shot,
            min_width_fraction=1/4,
            min_height_fraction=1/4,
@@ -557,13 +557,11 @@ def lab_to_rgb(lab):
         return tf.reshape(rgb_pixels, tf.shape(lab)) * 255.
 
 
-@gin.configurable(blacklist=["filenames"])
+@gin.configurable(denylist=["filenames"])
 def test_pipeline(filenames,
                   shot_len=100,
                   batch_size=16):
     ds = tf.data.Dataset.from_tensor_slices(filenames)
-
-    print("\n\n" , filenames , "\n\n")
     ds = ds.interleave(
         lambda x: tf.data.TFRecordDataset(
             x, compression_type="GZIP").map(parse_test_sample,
@@ -577,7 +575,7 @@ def test_pipeline(filenames,
 
 
 @tf.function
-@gin.configurable(blacklist=["sample"])
+@gin.configurable(denylist=["sample"])
 def parse_test_sample(sample,
                       frame_width=48,
                       frame_height=27,
