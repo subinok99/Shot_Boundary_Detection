@@ -1,23 +1,19 @@
 import numpy as np
-import cython
-cimport numpy as cnp
 
-
-def calc_scatters(cnp.ndarray K):
+# np.ndarray K
+def calc_scatters(K):
     """
     Calculate scatter matrix:
     scatters[i,j] = {scatter of the sequence with starting frame i and ending frame j} 
     """
-    cdef:
-        int i, j, n
-        cnp.ndarray K1, K2, scatters
+    
         
     n = K.shape[0]
     K1 = np.cumsum([0] + list(np.diag(K)))
     K2 = np.zeros((n+1, n+1))
-    K2[1:, 1:] = np.cumsum(np.cumsum(K, 0), 1); # TODO: use the fact that K - symmetric
+    K2[1:, 1:] = np.cumsum(np.cumsum(K, 0), 1) # TODO: use the fact that K - symmetric
 
-    scatters = np.zeros((n, n));
+    scatters = np.zeros((n, n))
 
     for i in range(n):
         for j in range(i, n):
@@ -26,8 +22,8 @@ def calc_scatters(cnp.ndarray K):
     
     return scatters
 
-def cpd_nonlin(cnp.ndarray K, int ncp, int lmin=1, int lmax=100000, backtrack=True, verbose=True,
-    out_scatters=None):
+# cnp.ndarray K, int ncp, int lmin=1, int lmax=100000, backtrack=True, verbose=True, out_scatters=None
+def cpd_nonlin(K, ncp, lmin=1, lmax=100000, backtrack=True, verbose=True, out_scatters=None):
 
     """ Change point detection with dynamic programming
     K - square kernel matrix 
@@ -41,11 +37,7 @@ def cpd_nonlin(cnp.ndarray K, int ncp, int lmin=1, int lmax=100000, backtrack=Tr
         obj_vals - values of the objective function for 0..m changepoints
         
     """
-    cdef:
-        int m, n, n1, k, l, t
-        double c
-        cnp.ndarray I, J, p
-        
+
     m = int(ncp)  # prevent numpy.int64
 
     n, n1 = K.shape[0], K.shape[1]
