@@ -118,8 +118,11 @@ options.restore_resnet_features = None
 options.test_only = False
 options.transition_only_data_fraction = 0.3
 options.transition_only_trn_files = None
-#options.trn_files = 
-#options.tst_files = 
+
+options.trn_files =  ['data/BBCDataset_Train.txt-0000.tfrecord'] 
+options.tst_files = {'bbc_val': ['data/BBCDataset_Valid/*.tfrecord']}
+options.new_transnet = True
+#options.entropy_similarity = True
 
 # Parameters for parse_test_sample:
 # ==============================================================================
@@ -183,7 +186,7 @@ train_transition_pipeline.shuffle_buffer = 100
 training.evaluate_on_middle_frames_only = True
 training.grad_clipping = 10.0
 training.log_freq = 200
-training.n_batches_per_epoch = 750
+training.n_batches_per_epoch = 50 #750
 training.optimizer = @tf.keras.optimizers.SGD
 
 # Parameters for TransNetV2:
@@ -201,3 +204,5 @@ TransNetV2.use_many_hot_targets = True
 TransNetV2.use_mean_pooling = False
 TransNetV2.use_resnet_features = False
 TransNetV2.use_resnet_like_top = False
+
+TransNetV2.use_entropy_similarity = True

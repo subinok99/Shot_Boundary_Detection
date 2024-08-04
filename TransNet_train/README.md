@@ -1,3 +1,5 @@
+original project : https://github.com/soCzech/TransNetV2.git   
+
 # Datasets   
 ### Download  
 * RAI & BBC (https://aimagelab.ing.unimore.it/imagelab/researchActivity.asp?idActivity=19)   
@@ -12,9 +14,12 @@
 
    
 # Train   
-### Modify config   
+### Edit config   
 > configs/transnetv2.gin   
-* datasets path  (options.trn_files  ,  options.tst_files)   
+* datasets path  : **options.trn_files  ,  options.tst_files**
+* whether you will use the 'modified model' I created  : **options.new_transnet**   
+If set to False, the existing transnet v2 can be used.
+* whether you will use the 'entropy similarity' I created : **TransNetV2.use_entropy_similarity**   
 
 ### Run   
 > python training.py configs/transnetv2.gin   

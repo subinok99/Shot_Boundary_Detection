@@ -35,7 +35,8 @@ def get_options_dict(n_epochs=None,
                      bi_tempered_loss=False,
                      bi_tempered_loss_temp2=1.,
                      learning_rate_schedule=None,
-                     learning_rate_decay=None):
+                     learning_rate_decay=None,
+                     new_transnet = False):
     trn_files_ = []
     for fn in trn_files:
         trn_files_.extend(glob.glob(fn))
@@ -82,7 +83,8 @@ def get_options_dict(n_epochs=None,
         "bi_tempered_loss": bi_tempered_loss,
         "bi_tempered_loss_temp2": bi_tempered_loss_temp2,
         "learning_rate_schedule": learning_rate_schedule,
-        "learning_rate_decay": learning_rate_decay
+        "learning_rate_decay": learning_rate_decay,
+        "new_transnet":new_transnet
     }
 
 
@@ -348,6 +350,11 @@ if __name__ == "__main__":
     elif options["c3d_net"]:
         net = models.C3DNet()
         logit_fc = tf.sigmoid
+    elif options["new_transnet"]:
+        net = transnet.TransNetV2_modify()
+        logit_fc = tf.sigmoid
+        if options["bi_tempered_loss"]:
+            logit_fc = lambda x: tempered_sigmoid(x, t=options["bi_tempered_loss_temp2"])
     else:
         net = transnet.TransNetV2()
         logit_fc = tf.sigmoid
