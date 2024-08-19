@@ -1,13 +1,11 @@
-import argparse, sys
+import argparse
 from matplotlib import pyplot as plt
 from cpd_auto import cpd_auto
 import numpy as np
 import h5py
 from tqdm import tqdm
-import glob
 import feature_extraction
 import cv2
-import time
 
 import os
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
@@ -79,7 +77,6 @@ def GT_based_KTS(dataset, video_name, save_h5_path, max_shot, data_dir):
     resultFile[video_name].create_dataset("n_frames", data=n_frames)
     resultFile.close()       
 
-def Use_feature_version(dataset, max_shot, result_dir, data_dir):
     for split_idx in range(0, 1):
         print("split_idx :", str(split_idx))
 
@@ -91,7 +88,6 @@ def Use_feature_version(dataset, max_shot, result_dir, data_dir):
             save_h5_path = "{}{}_split{}_max{}.h5".format(result_dir, dataset, split_idx, max_shot)
 
             GT_based_KTS(dataset, video_name, save_h5_path, max_shot, data_dir)
-
 
 def toFrame(vid_path, save_dir):
     vidcap = cv2.VideoCapture(vid_path)
@@ -187,20 +183,6 @@ def Inception_based_KTS(dataset, video_name, save_h5_path, max_shot, data_dir, v
     resultFile[video_name].create_dataset("scenes", data=list_cps)
     resultFile.close()    
 
-def Extract_feature_version(dataset, max_shot, result_dir, data_dir):
-    for split_idx in range(0, 1):
-        print("split_idx :", str(split_idx))
-
-        video_list = os.listdir("{}split_video/{}/split_{}".format(data_dir, dataset, split_idx))
-        
-        #with tqdm(leave=True) as pbar:
-        for video_name in video_list:
-            video_path = "{}split_video/{}/split_{}/{}".format(data_dir, dataset, split_idx, video_name)            
-            video_name = video_name.split(".")[0]
-            save_h5_path = "{}{}_split{}_max{}.h5".format(result_dir, dataset, split_idx, max_shot)            
-
-            Inception_based_KTS(dataset, video_name, save_h5_path, max_shot, data_dir, video_path)
-            #pbar.update()
 
 if __name__ == '__main__' :
     parser = argparse.ArgumentParser()
@@ -219,11 +201,31 @@ if __name__ == '__main__' :
     max_shot = int(args.max_shot)
 
     if (use_features=="true"):
-        print("\n\n--------use---------\n\n")
-        Use_feature_version(dataset, max_shot, args.result_dir, args.data_dir)
+        for split_idx in range(0, 4):
+            print("split_idx :", str(split_idx))
+
+            video_list = os.listdir("{}split_video/{}/split_{}".format(args.data_dir, dataset, split_idx))
+            
+            for video_name in tqdm(video_list, leave=True):
+                video_name = video_name.split(".")[0]
+
+                save_h5_path = "{}{}_split{}_max{}.h5".format(args.result_dir, dataset, split_idx, max_shot)
+
+                GT_based_KTS(dataset, video_name, save_h5_path, max_shot, args.data_dir)
+
     else:
-        print("\n\n--------else---------\n\n")
-        Extract_feature_version(dataset, max_shot, args.result_dir, args.data_dir)   
+        for split_idx in range(0, 4):
+            print("split_idx :", str(split_idx))
+
+            video_list = os.listdir("{}split_video/{}/split_{}".format(args.data_dir, dataset, split_idx))
+
+            for video_name in video_list:
+                video_path = "{}split_video/{}/split_{}/{}".format(args.data_dir, dataset, split_idx, video_name)            
+                video_name = video_name.split(".")[0]
+                save_h5_path = "{}{}_split{}_max{}.h5".format(args.result_dir, dataset, split_idx, max_shot)            
+
+                Inception_based_KTS(dataset, video_name, save_h5_path, max_shot, args.data_dir, video_path)
+
     
     
 
