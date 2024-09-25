@@ -213,7 +213,7 @@ def kts_shot_extraction_raw(dataset, video_name, save_h5_path, max_shot, data_di
     resultFile.close()    
 
 
-def kts_or_shotextraction(save_h5_path, vid_name, transNet_scenes, frame_save_dir, total):
+def both_shot_extraction(save_h5_path, vid_name, transNet_scenes, frame_save_dir, total):
     _, _, kts_scenes = kts.method_KTS_total(save_h5_path, vid_name, total)
 
    # print(kts_scenes)
@@ -386,7 +386,7 @@ if __name__ == '__main__' :
     parser.add_argument('--max_shot', default=15, help='(If use KTS) Maximum number of shot')
     parser.add_argument('--result_dir', default="result/", help='Result Directory')
     parser.add_argument('--data_dir', default="data/", help='Data Directory')
-    #### 나중에 적용하기 : parser.add_argument('--pre_processing', default="No", help='After applying the KTS or TransNet model, Whether to apply a post-processing step')
+    #### parser.add_argument('--post_processing', default="Yes", help='After applying the KTS or TransNet model, Whether to apply a post-processing step')
     args = parser.parse_args()
 
     types = args.types.lower()
